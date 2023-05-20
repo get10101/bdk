@@ -13,6 +13,7 @@
 
 use std::collections::{HashMap, HashSet};
 use std::ops::{Deref, DerefMut};
+use std::time::Duration;
 
 use bitcoin::{Transaction, Txid};
 
@@ -218,7 +219,9 @@ impl WalletSync for EsploraBlockchain {
                     tx_req.satisfy(full_txs)?
                 }
                 Request::Finish(batch_update) => break batch_update,
-            }
+            };
+
+            std::thread::sleep(Duration::from_millis(250));
         };
 
         database.commit_batch(batch_update)?;
